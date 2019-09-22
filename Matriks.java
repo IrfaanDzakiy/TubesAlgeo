@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 class Matriks{
-	double[][] mat;
+	double[][] mat, 
 	int brs,kol;
 
 	Matriks(int baris, int kolom){		//Konstruktor
@@ -136,5 +136,38 @@ class Matriks{
 		this.gauss();
 		this.sortMatriks();
 	}
+	
+	// Mendapatkan matriks untuk dicari determinannya sehingga menjadi elemen p,q pada kofaktor matriks;
+	// NOTE : belom jadi cofactor ya ini
+	void GetCofactor(int p, int q){
+		Matriks temp =  new Matriks(this.brs, this.kol);
+		int m = 0;
+		int n = 0;
+		for (int i = 0; i < this.brs; i++){
+			for (int j = 0; j < this.kol; j++){
+				if ((i != p) && (j != q)){
+					temp[m][n] = this.mat[i][j];
+					n++
+					if ( n == this.kol - 1){
+						n =  0;
+						m++;
+					}
+				}
+			}
+		}
+	}
+				
+						
+					
+	// Mendapatkan matriks transpose dari suatu matriks.
+	void Transpose(){
+		Matriks transpose = new Matriks(this.brs, this.kol);
+		for (int i = 0; i < this.brs; i++){
+			for (int j = 0; j < this.kol; j++){
+				transpose[i][j] = this.mat[j][i];
+			}
+		}
+	}
+		
 
 }
