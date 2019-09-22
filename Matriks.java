@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 class Matriks{
-	double[][] mat, 
+	double[][] mat;
 	int brs,kol;
 
 	Matriks(int baris, int kolom){		//Konstruktor
@@ -136,18 +136,18 @@ class Matriks{
 		this.gauss();
 		this.sortMatriks();
 	}
-	
+
 	// Mendapatkan matriks untuk dicari determinannya sehingga menjadi elemen p,q pada kofaktor matriks;
 	// NOTE : belom jadi cofactor ya ini
-	void GetCofactor(int p, int q){
-		Matriks temp =  new Matriks(this.brs, this.kol);
+	Matriks getCofactor(int p, int q){
+		Matriks temp =  new Matriks(this.brs - 1, this.kol - 1);
 		int m = 0;
 		int n = 0;
 		for (int i = 0; i < this.brs; i++){
 			for (int j = 0; j < this.kol; j++){
 				if ((i != p) && (j != q)){
-					temp[m][n] = this.mat[i][j];
-					n++
+					temp.mat[m][n] = this.mat[i][j];
+					n++;
 					if ( n == this.kol - 1){
 						n =  0;
 						m++;
@@ -155,19 +155,59 @@ class Matriks{
 				}
 			}
 		}
+		return temp;
 	}
 				
 						
 					
 	// Mendapatkan matriks transpose dari suatu matriks.
-	void Transpose(){
-		Matriks transpose = new Matriks(this.brs, this.kol);
+	Matriks transpose(){
+		Matriks temp = new Matriks(this.kol, this.brs);
 		for (int i = 0; i < this.brs; i++){
 			for (int j = 0; j < this.kol; j++){
-				transpose[i][j] = this.mat[j][i];
+				temp.mat[j][i] = this.mat[i][j];
 			}
 		}
+		return temp;
 	}
-		
 
+	double determinan (){
+	double pos = 0;
+	double neg = 0;
+	if ((this.brs == 2) && (this.kol == 2)){
+		double a = this.mat[0][0];
+		double b = this.mat[0][1];
+		double c = this.mat[1][0];
+		double d = this.mat[1][1];
+		return ((a*d)-(b*c));
+	}
+
+	else {
+		for (int j = 0;j<this.kol;j++){
+			double x = 1;
+			for (int i = 0;i<this.brs;i++){
+				if (i+j>=this.kol){
+					x *= this.mat[i][i+j-(this.kol)];
+				}
+				else{
+					x *= this.mat[i][i+j];
+				}
+			}
+			pos += x;
+		}
+		for (int j = this.kol - 1;j>-1;j--){
+			double y = 1;
+			for (int i = 0;i<this.brs;i++){
+				if (j-i<=-1){
+					y *= this.mat[i][j-i+this.kol];
+				}
+				else{
+					y *= this.mat[i][j-i];
+				}
+			}
+			neg += y;
+		}
+		return pos - neg;
+	}
+}
 }
