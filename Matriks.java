@@ -3,11 +3,11 @@ import java.io.*;
 import java.util.ArrayList;
 
 class Matriks{
-	float[][] mat;
+	double[][] mat;
 	int brs,kol;
 
 	Matriks(int baris, int kolom){		//Konstruktor
-		mat = new float[baris][kolom];
+		mat = new double[baris][kolom];
 		this.brs = baris;
 		this.kol = kolom;
 	}
@@ -19,10 +19,10 @@ class Matriks{
 		for ( i = 0; i<this.brs; i++){
             for ( j = 0; j<(this.kol-1); j++){
                 System.out.print("Masukan a" + (i+1) + (j + 1) + ": ");
-                this.mat[i][j] = read.nextFloat();
+                this.mat[i][j] = read.nextDouble();
             }
             System.out.print("Masukan b" + (i+1) + ": ");
-            this.mat[i][this.kol-1] = read.nextFloat();
+            this.mat[i][this.kol-1] = read.nextDouble();
         }
 	}
 
@@ -34,4 +34,107 @@ class Matriks{
 			System.out.println();
 		}
 	}
+
+	void tukarBaris(int baris1, int baris2){
+		//menukar baris (baris1) dengan baris (baris2)
+		double temp;
+		for (int j = 0; j<this.kol; j++){
+			temp = this.mat[baris1][j];
+			this.mat[baris1][j] = this.mat[baris2][j];
+			this.mat[baris2][j] = temp;
+		}
+	}
+
+	int getFirstIdx(int baris){
+		//mendapatkan indeks pertama pada baris yang bukan nol, jika engga ketemu return kol.
+		//baris dimulai dari 0 - (brs-1)
+		boolean found = false;
+		int j = 0;
+		while (!found && (j<this.kol)){
+			if (this.mat[baris][j] != 0){
+				found = true;
+			}
+			else{
+				j++;
+			}
+		}
+		return j;
+	}
+
+	void makeSatu(int baris){
+		//membuat koef pertama menjadi satu dan koefisien selanjutnya menyesuaikan;
+		int firstidx = this.getFirstIdx(baris);
+		if (firstidx<this.brs){
+			double pembagi = this.mat[baris][firstidx];
+			for (int j = firstidx; j<this.kol; j++){
+				this.mat[baris][j] = this.mat[baris][j] / pembagi;
+			}
+		}
+	}
+
+	void makeNol(int baris){
+		//membuat koefisien dibawah baris menjadi nol dan sisanya menyesuaikan
+		int firstidx = this.getFirstIdx(baris);	
+		if (firstidx<this.brs){	
+			for (int i = baris+1; i<this.brs; i++){
+				while (this.mat[i][firstidx] != 0){
+					double faktor = this.mat[i][firstidx] / this.mat[baris][firstidx];
+					for (int j = firstidx; j<this.kol; j++){
+						this.mat[i][j] -=  this.mat[baris][j] * faktor;
+					}
+				}
+			}
+		}
+	}
+
+	void sortMatriks(){
+		//bubble sort matriks
+		////baris dimulai dari 0 - (brs-1)
+		int maks,idxmaks;
+		for (int i = 0; i<this.brs; i++){
+			idxmaks = this.brs-1;
+			maks = this.getFirstIdx(idxmaks);
+			for (int j = this.brs-2; j>-1+i; j--){
+				if (maks < this.getFirstIdx(j)){
+					this.tukarBaris(idxmaks,j);
+					idxmaks = j;
+					maks = this.getFirstIdx(idxmaks);
+				}
+			}
+		}
+	}
+
+	void rSortMatriks(){
+		//reverse bubble sort matriks
+		////baris dimulai dari 0 - (brs-1)
+		int maks,idxmaks;
+		for (int i = 0; i<this.brs; i++){
+			idxmaks = this.brs-1;
+			maks = this.getFirstIdx(idxmaks);
+			for (int j = this.brs-2; j>-1+i; j--){
+				if (maks > this.getFirstIdx(j)){
+					this.tukarBaris(idxmaks,j);
+					idxmaks = j;
+					maks = this.getFirstIdx(idxmaks);
+				}
+			}
+		}
+	}
+
+	void gauss(){
+		for (int i = 0; i<this.brs; i++ ){
+			this.makeNol(i);
+		}
+	}
+
+	void gaussJordan(){
+		this.gauss();
+		for (int i = 0; i<this.brs; i++){
+			this.makeSatu(i);
+		}
+		this.rSortMatriks();
+		this.gauss();
+		this.sortMatriks();
+	}
+
 }
