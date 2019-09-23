@@ -172,42 +172,56 @@ class Matriks{
 	}
 
 	double determinan (){
-	double pos = 0;
-	double neg = 0;
-	if ((this.brs == 2) && (this.kol == 2)){
-		double a = this.mat[0][0];
-		double b = this.mat[0][1];
-		double c = this.mat[1][0];
-		double d = this.mat[1][1];
-		return ((a*d)-(b*c));
-	}
+		double pos = 0;
+		double neg = 0;
+		if ((this.brs == 2) && (this.kol == 2)){
+			double a = this.mat[0][0];
+			double b = this.mat[0][1];
+			double c = this.mat[1][0];
+			double d = this.mat[1][1];
+			return ((a*d)-(b*c));
+		}
 
-	else {
-		for (int j = 0;j<this.kol;j++){
-			double x = 1;
-			for (int i = 0;i<this.brs;i++){
-				if (i+j>=this.kol){
-					x *= this.mat[i][i+j-(this.kol)];
-				}
-				else{
+		else {
+			for (int j = 0;j<this.kol;j++){
+				double x = 1;
+				for (int i = 0;i<this.brs;i++){
+					if (i+j>=this.kol){
+						x *= this.mat[i][i+j-(this.kol)];
+					}
+					else{
 					x *= this.mat[i][i+j];
+					}
 				}
+				pos += x;
 			}
-			pos += x;
-		}
-		for (int j = this.kol - 1;j>-1;j--){
-			double y = 1;
-			for (int i = 0;i<this.brs;i++){
-				if (j-i<=-1){
-					y *= this.mat[i][j-i+this.kol];
+			for (int j = this.kol - 1;j>-1;j--){
+				double y = 1;
+				for (int i = 0;i<this.brs;i++){
+					if (j-i<=-1){
+						y *= this.mat[i][j-i+this.kol];
+					}
+					else{
+						y *= this.mat[i][j-i];
+					}
 				}
-				else{
-					y *= this.mat[i][j-i];
-				}
+				neg += y;
 			}
-			neg += y;
+			return pos - neg;
 		}
-		return pos - neg;
 	}
-}
+	
+	//Mendapatkan Matriks kofaktor
+	Matriks Cofactor(){
+		Matriks cof = new Matriks(this.brs, this.kol);
+		for (p = 0; p < this.brs; p++){
+			for (q = 0; q < this.kol; q++){
+				cof.mat[p][q] = Math.pow(-1, (p + q))*(this.getCofactor(p, q).determinan());
+			}
+		}
+		return cof;
+	}
+	Matriks Adjoint(){
+		return this.Cofactor().transpose();
+	}
 }
