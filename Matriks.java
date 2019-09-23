@@ -282,4 +282,41 @@ class Matriks{
 	        return in;
 			
 	}
+
+	double interpol(){
+		int n;
+
+		Scanner read = new Scanner(System.in);
+		System.out.print("Masukan n :");
+		n = read.nextInt();
+
+		Matriks mutrex = new Matriks(this.brs, (this.kol+1));
+		int i,j;
+		double x,y;
+		Scanner read = new Scanner(System.in);
+		for ( i = 0; i < n+1; i++){
+			System.out.print("Masukan x " + ": ");
+			x = read.nextDouble();
+			System.out.print("Masukan y " + ": ");
+			y = read.nextDouble();
+			for ( j = 0; j<(n+2); j++){
+				mutrex.mat[i][j] = Math.pow(x, j);
+			}
+			mutrex.mat[i][n+2] = y;
+		}
+		mutrex.gaussJordan();
+
+		double f;
+		Scanner read = new Scanner(System.in);
+		f = read.nextDouble();
+
+		double res;
+		res = 0;
+
+		int k;
+		for ( k = 0; k < n+1; k++){
+			res += ((mutrex.mat[k][n+2])*Math.pow(f, k));
+		}
+		return res;
+	}
 }
