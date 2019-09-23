@@ -212,16 +212,16 @@ class Matriks{
 	}
 	
 	//Mendapatkan Matriks kofaktor
-	Matriks Cofactor(){
+	Matriks cofactor(){
 		Matriks cof = new Matriks(this.brs, this.kol);
-		for (p = 0; p < this.brs; p++){
-			for (q = 0; q < this.kol; q++){
+		for (int p = 0; p < this.brs; p++){
+			for (int q = 0; q < this.kol; q++){
 				cof.mat[p][q] = Math.pow(-1, (p + q))*(this.getCofactor(p, q).determinan());
 			}
 		}
 		return cof;
 	}
-	Matriks Adjoint(){
-		return this.Cofactor().transpose();
+	Matriks adjoint(){
+		return this.cofactor().transpose();
 	}
 }
