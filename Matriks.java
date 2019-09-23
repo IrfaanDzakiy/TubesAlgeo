@@ -293,7 +293,6 @@ class Matriks{
 		Matriks mutrex = new Matriks(this.brs, (this.kol+1));
 		int i,j;
 		double x,y;
-		Scanner read = new Scanner(System.in);
 		for ( i = 0; i < n+1; i++){
 			System.out.print("Masukan x " + ": ");
 			x = read.nextDouble();
@@ -307,7 +306,6 @@ class Matriks{
 		mutrex.gaussJordan();
 
 		double f;
-		Scanner read = new Scanner(System.in);
 		f = read.nextDouble();
 
 		double res;
