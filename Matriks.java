@@ -171,7 +171,8 @@ class Matriks{
 			return (Mi.determinan()/M.determinan());
 		}
 		else{
-			System.out.println("Maaf, determinan dari SPL adalah 0 sehingga tidak bisa menggunakan metode cramer. Silakan menggunakan metode lain\n")
+			System.out.println("Maaf, determinan dari SPL adalah 0 sehingga tidak bisa menggunakan metode cramer. Silakan menggunakan metode lain\n");
+			return 0;
 		}
 	}
 	// Mendapatkan matriks untuk dicari determinannya sehingga menjadi elemen p,q pada kofaktor matriks;
@@ -260,5 +261,25 @@ class Matriks{
 	}
 	Matriks adjoint(){
 		return this.cofactor().transpose();
+	}
+
+	Matriks kaliKons(double X){
+		Matriks x = new Matriks(this.brs,this.kol);
+		for (int p = 0; p < this.brs; p++){
+			for (int q = 0; q < this.kol; q++){
+				x.mat[p][q] = X * this.mat[p][q];
+			}
+		}
+		return x;
+	}
+
+
+	//membuat matriks invers
+	Matriks inverse(){
+		
+			Matriks in = new Matriks(this.brs, this.kol);
+			in = this.adjoint().kaliKons(1/this.determinan());
+	        return in;
+			
 	}
 }
