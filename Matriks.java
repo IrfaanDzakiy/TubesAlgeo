@@ -45,6 +45,16 @@ class Matriks{
 		}
 	}
 
+	void tukarKolom(int kolom1, int kolom2){
+		//menukar kolom pada matriks augmented untuk metode cramer
+		double temp;
+		for (int i = 0; i<this.brs; i++){
+			temp = this.mat[i][kolom1];
+			this.mat[i][kolom1] = this.mat[i][kolom2];
+			this.mat[i][kolom2] = temp;
+		}
+	}
+
 	int getFirstIdx(int baris){
 		//mendapatkan indeks pertama pada baris yang bukan nol, jika engga ketemu return kol.
 		//baris dimulai dari 0 - (brs-1)
@@ -122,12 +132,14 @@ class Matriks{
 	}
 
 	void gauss(){
+		//mengubah matriks kedalam bentuk gauss
 		for (int i = 0; i<this.brs; i++ ){
 			this.makeNol(i);
 		}
 	}
 
 	void gaussJordan(){
+		//mengubah matriks kedalam bentuk gauss jordan
 		this.gauss();
 		for (int i = 0; i<this.brs; i++){
 			this.makeSatu(i);
@@ -137,6 +149,31 @@ class Matriks{
 		this.sortMatriks();
 	}
 
+	double cramer(int xi){
+		//menghasilkan nilai xi dengan menggunakan metode cramer
+		
+		Matriks Mi = new Matriks(this.brs, this.kol-1);
+		Matriks M = new Matriks(this.brs, this.kol-1);
+		if (M.determinan() != 0){
+			for (int i = 0; i<this.brs; i++){
+				for (int j = 0; j<this.kol-1; j++){
+					M.mat[i][j] = this.mat[i][j];
+				}
+			}
+			this.tukarKolom(xi,this.kol-1);
+			for (int i = 0; i<this.brs; i++){
+				for (int j = 0; j<this.kol-1; j++){
+					Mi.mat[i][j] = this.mat[i][j];
+				}
+			}
+			this.tukarKolom(this.kol-1,xi);
+			System.out.println(M.determinan());
+			return (Mi.determinan()/M.determinan());
+		}
+		else{
+			System.out.println("Maaf, determinan dari SPL adalah 0 sehingga tidak bisa menggunakan metode cramer. Silakan menggunakan metode lain\n")
+		}
+	}
 	// Mendapatkan matriks untuk dicari determinannya sehingga menjadi elemen p,q pada kofaktor matriks;
 	// NOTE : belom jadi cofactor ya ini
 	Matriks getCofactor(int p, int q){
@@ -212,7 +249,7 @@ class Matriks{
 	}
 	
 	//Mendapatkan Matriks kofaktor
-	Matriks Cofactor(){
+	Matriks cofactor(){
 		Matriks cof = new Matriks(this.brs, this.kol);
 		for (int p = 0; p < this.brs; p++){
 			for (int q = 0; q < this.kol; q++){
@@ -221,26 +258,7 @@ class Matriks{
 		}
 		return cof;
 	}
-	Matriks Adjoint(){
-		return this.Cofactor().transpose();
-	}
-	
-	Matriks KaliKons(double X){
-		for (int p = 0; p < this.brs; p++){
-			for (int q = 0; q < this.kol; q++){
-				this.mat[p][q] *= X;
-			}
-		}
-		return this;
-	}
-		
-	
-	//membuat matriks invers
-	Matriks Inverse(){
-		Matriks inverse = new Matriks(this.brs, this.kol);
-		
-		inverse = this.Adjoint().KaliKons(this.determinan());
-		
-        return inverse;
+	Matriks adjoint(){
+		return this.cofactor().transpose();
 	}
 }
