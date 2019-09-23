@@ -212,7 +212,7 @@ class Matriks{
 	}
 	
 	//Mendapatkan Matriks kofaktor
-	Matriks cofactor(){
+	Matriks Cofactor(){
 		Matriks cof = new Matriks(this.brs, this.kol);
 		for (int p = 0; p < this.brs; p++){
 			for (int q = 0; q < this.kol; q++){
@@ -221,7 +221,26 @@ class Matriks{
 		}
 		return cof;
 	}
-	Matriks adjoint(){
-		return this.cofactor().transpose();
+	Matriks Adjoint(){
+		return this.Cofactor().transpose();
+	}
+	
+	Matriks KaliKons(double X){
+		for (int p = 0; p < this.brs; p++){
+			for (int q = 0; q < this.kol; q++){
+				this.mat[p][q] *= X;
+			}
+		}
+		return this;
+	}
+		
+	
+	//membuat matriks invers
+	Matriks Inverse(){
+		Matriks inverse = new Matriks(this.brs, this.kol);
+		
+		inverse = this.Adjoint().KaliKons(this.determinan());
+		
+        return inverse;
 	}
 }
