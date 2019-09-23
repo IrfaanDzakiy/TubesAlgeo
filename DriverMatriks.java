@@ -2,16 +2,14 @@ import java.util.Scanner;
 
 class DriverMatriks{
 	public static void main(String[] args){
-		int m,n;
+		int n;
+		double hasil;
 		Scanner read = new Scanner(System.in);
-
-		System.out.print("Masukan m :");
-		m = read.nextInt();
 		System.out.print("Masukan n :");
 		n = read.nextInt();
 
-		Matriks M = new Matriks(m,n+1);
-		M.bacaSPL();
-		M.tulisMatriks();
+		Matriks M = new Matriks(n+1,n+2);
+		hasil = M.interpol(n);
+		System.out.print(hasil);
 	}
 }
