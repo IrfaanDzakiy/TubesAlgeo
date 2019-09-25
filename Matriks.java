@@ -177,7 +177,7 @@ class Matriks{
 	}
 	// Mendapatkan matriks untuk dicari determinannya sehingga menjadi elemen p,q pada kofaktor matriks;
 	// NOTE : belom jadi cofactor ya ini
-	Matriks getCofactor(int p, int q){
+	Matriks minor(int p, int q){
 		Matriks temp =  new Matriks(this.brs - 1, this.kol - 1);
 		int m = 0;
 		int n = 0;
@@ -195,7 +195,18 @@ class Matriks{
 		}
 		return temp;
 	}
-				
+	
+	double miniminor(int p, int q){
+		double temp = 1;
+		for (int i = 0; i < this.brs; i++){
+			for (int j = 0; j < this.kol; j++){
+				if ((i != p) && (j != q)){
+					temp = this.mat[i][j];
+				}
+			}
+		}
+		return temp;
+	}
 						
 					
 	// Mendapatkan matriks transpose dari suatu matriks.
@@ -254,11 +265,17 @@ class Matriks{
 		Matriks cof = new Matriks(this.brs, this.kol);
 		for (int p = 0; p < this.brs; p++){
 			for (int q = 0; q < this.kol; q++){
-				cof.mat[p][q] = Math.pow(-1, (p + q))*(this.getCofactor(p, q).determinan());
+				if ((this.brs == 2) && (this.kol == 2)){
+					cof.mat[p][q] = Math.pow(-1, (p+2+q))*(this.miniminor(p, q));
+				}
+				if ((this.brs > 2) && (this.kol > 2)) {
+					cof.mat[p][q] = Math.pow(-1, (p+2+q))*(this.minor(p, q).determinan());
+				}
 			}
 		}
 		return cof;
 	}
+
 	Matriks adjoint(){
 		return this.cofactor().transpose();
 	}
@@ -299,6 +316,7 @@ class Matriks{
 			mutrex.mat[i][n] = y;
 		}
 
+		mutrex.gaussJordan();
 		double f;
 		f = read.nextDouble();
 
@@ -310,5 +328,32 @@ class Matriks{
 			res += ((mutrex.mat[k][n])*Math.pow(f, k));
 		}
 		return res;
+	}
+
+	void tulisMenu(){
+		System.out.print("MENU"); System.out.println();
+        System.out.print("1. Sistem Persamaan Linier"); System.out.println();
+        System.out.print("2. Determinan"); System.out.println();
+        System.out.print("3. Matriks Balikan"); System.out.println();
+        System.out.print("4. Matriks Kofaktor"); System.out.println();
+        System.out.print("5. Adjoin"); System.out.println();
+        System.out.print("6. Interpolasi Polinom"); System.out.println();
+        System.out.print("7. Keluar"); System.out.println();
+	}
+
+	void tulisSubMenu(){
+        System.out.print("1. Metode eliminasi Gauss"); System.out.println();
+        System.out.print("2. Metode eliminasi Gauss-Jordan"); System.out.println();
+        System.out.print("3. Metode Matriks Balikan"); System.out.println();
+        System.out.print("4. Kaidah Cramer"); System.out.println();
+	}
+
+	int cetakMenu(){
+		int pilihan;
+		this.tulisMenu();
+		Scanner read = new Scanner(System.in);
+		System.out.print("Masukin pilihan kamu ya :");
+		pilihan = read.nextInt();
+		return pilihan;
 	}
 }
