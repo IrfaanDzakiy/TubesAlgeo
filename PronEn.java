@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.Scanner;
 
 class PronEn{
@@ -10,7 +11,7 @@ class PronEn{
             Matriks M = new Matriks(1,1);
             
             pilihanku = M.cetakMenu();
-
+            
             if (pilihanku == 1) {
                 M.tulisSubMenu();
                 int pilihan;
@@ -43,6 +44,12 @@ class PronEn{
                             System.out.print("Solusi berupa parametrik :  ");
                         }
                     }
+                    else {
+                        
+                    }
+                }
+                if (pilihan == 2){
+                    
                 }
             }
             if (pilihanku == 2) {
@@ -65,6 +72,7 @@ class PronEn{
                 System.out.print("Solusi determinan matriks adalah : "); 
                 System.out.print(hasil);
             }
+
             if (pilihanku == 3) {
                 int bar,kol;
                 System.out.print("Masukan Jumlah Baris :");
@@ -120,6 +128,7 @@ class PronEn{
                         Mutrex5.mat[i][j] = read.nextDouble();
                     }
                 }
+                Mutrex5.solusiSPLGaussJordan(Mutrex5);
                 System.out.print("Solusi Matriks hasil Adjoin adalah :  "); System.out.println();
                 Matriks hasilAdjoint = new Matriks(bar,kol);
                 hasilAdjoint = Mutrex5.adjoint();
