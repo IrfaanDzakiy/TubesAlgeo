@@ -149,31 +149,41 @@ class Matriks{
 		this.sortMatriks();
 	}
 
+	Matriks inverseSPL(){
+		//menghasilkan matriks variable(x1,x2,x3....xn) dengan menggunakan metode inverse. 
+		//prekondisi baris matriks sama dengan kolom dan determinan M tidak sama dengan 0
+		Matriks M = new Matriks(this.brs, this.kol-1);
+		Matriks MHasil = new Matriks(this.brs, 1);
+
+		for (int i = 0; i<this.brs; i++){
+			MHasil.mat[i][0] = this.mat[i][this.kol-1];
+			for (int j = 0; j<this.kol-1; j++){
+				M.mat[i][j] = this.mat[i][j];
+			}
+		}
+		Matriks in = M.inverse();
+		return in.kaliMatriks(MHasil);
+	}
+
 	double cramer(int xi){
 		//menghasilkan nilai xi dengan menggunakan metode cramer
-		
+		//prekondisi baris matriks sama dengan kolom dan determinan M tidak sama dengan 0
 		Matriks Mi = new Matriks(this.brs, this.kol-1);
 		Matriks M = new Matriks(this.brs, this.kol-1);
-		if (M.determinan() != 0){
-			for (int i = 0; i<this.brs; i++){
-				for (int j = 0; j<this.kol-1; j++){
-					M.mat[i][j] = this.mat[i][j];
-				}
+		for (int i = 0; i<this.brs; i++){
+			for (int j = 0; j<this.kol-1; j++){
+				M.mat[i][j] = this.mat[i][j];
 			}
-			this.tukarKolom(xi,this.kol-1);
-			for (int i = 0; i<this.brs; i++){
-				for (int j = 0; j<this.kol-1; j++){
-					Mi.mat[i][j] = this.mat[i][j];
-				}
+		}
+		this.tukarKolom(xi,this.kol-1);
+		for (int i = 0; i<this.brs; i++){
+			for (int j = 0; j<this.kol-1; j++){
+				Mi.mat[i][j] = this.mat[i][j];
 			}
-			this.tukarKolom(this.kol-1,xi);
-			System.out.println(M.determinan());
-			return (Mi.determinan()/M.determinan());
 		}
-		else{
-			System.out.println("Maaf, determinan dari SPL adalah 0 sehingga tidak bisa menggunakan metode cramer. Silakan menggunakan metode lain\n");
-			return 0;
-		}
+		this.tukarKolom(this.kol-1,xi);
+		System.out.println(M.determinan());
+		return (Mi.determinan()/M.determinan());
 	}
 	// Mendapatkan matriks untuk dicari determinannya sehingga menjadi elemen p,q pada kofaktor matriks;
 	// NOTE : belom jadi cofactor ya ini
@@ -290,14 +300,26 @@ class Matriks{
 		return x;
 	}
 
+	Matriks kaliMatriks(Matriks B){
+		//menghasilkan matriks hasil kali matriks this dan matriks B, pre kondisi kolom matriks (this) = baris matriks B.
+		Matriks C = new Matriks(this.brs,B.kol);
+		for (int i = 0; i < this.brs; i++) {
+            for (int j = 0; j < B.kol; j++) {
+                double x = 0;
+                for (int k = 0; k < B.brs; k++) {
+                    x += this.mat[i][k] * B.mat[k][j];
+                }
+                C.mat[i][j] = x;
+            }
+        }
+        return C;
+	}
 
 	//membuat matriks invers
 	Matriks inverse(){
-		
-			Matriks in = new Matriks(this.brs, this.kol);
-			in = this.adjoint().kaliKons(1/this.determinan());
-	        return in;
-			
+		Matriks in = new Matriks(this.brs, this.kol);
+		in = this.adjoint().kaliKons(1/this.determinan());
+        return in;		
 	}
 
 	double interpol(int n){
