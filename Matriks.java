@@ -150,6 +150,13 @@ class Matriks{
 		return output;
 	}
 
+	String solusiToString(Double input){	//Output
+		String output = "";
+		output += String.format("%f ", input);
+		output += "\n";
+		return output;
+	}
+
 	void tukarBaris(int baris1, int baris2){
 		//menukar baris (baris1) dengan baris (baris2)
 		double temp;
@@ -533,7 +540,7 @@ class Matriks{
 		pilihan = read.nextInt();
 		return pilihan;
 	}
-	void solusiSPLGaussJordan(){
+	String solusiSPLGaussJordan(){
 		int batas, i, j, k, l;
 		this.gaussJordan();
 		this.sortMatriks();
@@ -560,7 +567,6 @@ class Matriks{
 				hasil.mat[k][l+1] = this.mat[k][l];
 			}
 		}
-		hasil.tulisMatriks();
 		System.out.println();
 
 		String output = "";
@@ -604,13 +610,14 @@ class Matriks{
 			}
 		}
 		System.out.println(output);
+		return output;
 	}
-	void solusiSPLGauss(){
+	String solusiSPLGauss(){
 		this.gauss();
 		Matriks ada = new Matriks(this.brs, this.kol);
 		int count = 0;
 		int masalah = 2;
-
+		String output = "";
 		if (this.brs < this.kol-1){
 			count += 1;
 		}
@@ -640,11 +647,10 @@ class Matriks{
 		}
 		if (count != 0){
 			if (masalah == 1){
-				System.out.print("Solusi tidak ada"); System.out.println();
+				output += String.format("SPL tidak memiliki solusi\n");
 			}
 			else {
-				System.out.print("Solusi berupa parametrik:  ");
-				this.solusiSPLGaussJordan();
+				output += this.solusiSPLGaussJordan();
 			}
 		}
 		else {
@@ -659,10 +665,13 @@ class Matriks{
 				}
 				ada.mat[k][1] -= bacod;
 				ada.mat[k][1] /= this.mat[k][k];
-				System.out.print("x"+(h)+" = "+ada.mat[k][1]); System.out.println();
+				output += String.format("x%d = %%.2f\n",h,ada.mat[k][1]);
 				h++;
 			}
 		}
+		output += "\n";
+		System.out.println(output);
+		return output;
 	}
 	void solusiSPLCramer(){
 		double hasil;
