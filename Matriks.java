@@ -143,6 +143,12 @@ class Matriks{
 		return output;
 	}
 
+	String inputNamaFile(){
+		System.out.print("Masukan nama file :");
+		String nama = read.nextLine();
+		return nama;
+	}
+
 	String doubleToString(Double input){	//Output
 		String output = "";
 		output += String.format("%f ", input);
@@ -558,9 +564,6 @@ class Matriks{
 				hasil.mat[k][l+1] = this.mat[k][l];
 			}
 		}
-		hasil.tulisMatriks();
-		System.out.println();
-
 		String output = "";
 		if ((!hasil.isBarisNol(hasil.brs-1)) && (this.getFirstIdx(hasil.brs-1)==this.kol-1)){
 			output += String.format("SPL tidak memiliki solusi\n");
