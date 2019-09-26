@@ -3,7 +3,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.nio.file.Paths;
 import java.nio.file.Files;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 class PronEn{
 	public static void main(String[] args){
@@ -204,6 +209,12 @@ class PronEn{
                         Mutrex1.tulisMatriks();
                         Mutrex1.solusiSPLInvers();
                     }
+                    System.out.print("Mau disave ga? (1/0)");
+                    int mauga = read.nextInt();
+                    if (mauga == 1){
+                        String temp = Mutrex1.sTulisMatriks();
+                        Mutrex1.saveToFile(temp);
+                    }
                 }
                 if (pilihanku == 2) {
                     Matriks Mutrex2 = new Matriks(M.brs,M.kol);
@@ -214,6 +225,13 @@ class PronEn{
                     hasil = Mutrex2.determinan();
                     System.out.print("Solusi determinan matriks adalah : "); 
                     System.out.print(hasil);
+
+                    System.out.print("Mau disave ga? (1/0)");
+                    int mauga = read.nextInt();
+                    if (mauga == 1){
+                        String temp = Mutrex2.doubleToString(hasil);
+                        Mutrex2.saveToFile(temp);
+                    }
                 }
 
                 if (pilihanku == 3) {
@@ -225,6 +243,13 @@ class PronEn{
                     System.out.print("Solusi Matriks hasil inverse adalah :  "); System.out.println();
                     Matriks hasilInvers = new Matriks(Mutrex3.brs,Mutrex3.kol);
                     hasilInvers.inverse().tulisMatriks();
+
+                    System.out.print("Mau disave ga? (1/0)");
+                    int mauga = read.nextInt();
+                    if (mauga == 1){
+                        String temp = Mutrex3.sTulisMatriks();
+                        Mutrex3.saveToFile(temp);
+                    }
                 }
                 if (pilihanku == 4) {
                     Matriks Mutrex4 = new Matriks(M.brs,M.kol);
@@ -236,6 +261,13 @@ class PronEn{
                     Matriks hasilCofactor = new Matriks(Mutrex4.brs,Mutrex4.kol);
                     hasilCofactor = Mutrex4.cofactor();
                     hasilCofactor.tulisMatriks();
+
+                    System.out.print("Mau disave ga? (1/0)");
+                    int mauga = read.nextInt();
+                    if (mauga == 1){
+                        String temp = Mutrex4.sTulisMatriks();
+                        Mutrex4.saveToFile(temp);
+                    }
                 }
                 if (pilihanku == 5) {
                     Matriks Mutrex5 = new Matriks(M.brs,M.kol);
@@ -246,12 +278,26 @@ class PronEn{
                     Matriks hasilAdjoint = new Matriks(Mutrex5.brs,Mutrex5.kol);
                     hasilAdjoint = Mutrex5.adjoint();
                     hasilAdjoint.tulisMatriks();
+
+                    System.out.print("Mau disave ga? (1/0)");
+                    int mauga = read.nextInt();
+                    if (mauga == 1){
+                        String temp = Mutrex5.sTulisMatriks();
+                        Mutrex5.saveToFile(temp);
+                    }
                 }
 
                 if (pilihanku == 6) {
                     Matriks interporu = new Matriks(M.brs,M.kol);
                     double hasil = interporu.interpolfile();
                     System.out.print(hasil);
+
+                    System.out.print("Mau disave ga? (1/0)");
+                    int mauga = read.nextInt();
+                    if (mauga == 1){
+                        String temp = interporu.doubleToString(hasil);
+                        interporu.saveToFile(temp);
+                    }
                 }
                 if (pilihanku == 7) {
                     break;

@@ -3,6 +3,12 @@ import java.io.*;
 import java.util.ArrayList;
 import java.nio.file.Paths;
 import java.nio.file.Files;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 class Matriks{
 	double[][] mat;
@@ -101,6 +107,21 @@ class Matriks{
 			}
 		}
 	}
+	void saveToFile(String input){
+		try {
+			//Whatever the file path is.
+			System.out.print("Masukan nama file :");
+            String namaFile = read.nextLine();
+            File statText = new File(namaFile);
+            FileOutputStream is = new FileOutputStream(statText);
+            OutputStreamWriter osw = new OutputStreamWriter(is);    
+            Writer w = new BufferedWriter(osw);
+            w.write(input);
+            w.close();
+        } catch (IOException e) {
+            System.err.println("Problem writing to the file statsTest.txt");
+        }
+    }
 
 	void tulisMatriks(){	//Output
 		for (int i=0; i<this.brs; i++){
@@ -109,6 +130,24 @@ class Matriks{
 			}
 			System.out.println();
 		}
+	}
+
+	String sTulisMatriks(){	//Output
+		String output = "";
+		for (int i=0; i<this.brs; i++){
+			for (int j=0; j<this.kol; j++){
+				output += String.format("%f ", this.mat[i][j]);
+			}
+			output += "\n";
+		}
+		return output;
+	}
+
+	String doubleToString(Double input){	//Output
+		String output = "";
+		output += String.format("%f ", input);
+		output += "\n";
+		return output;
 	}
 
 	void tukarBaris(int baris1, int baris2){
@@ -461,6 +500,12 @@ class Matriks{
 		}
 		return res;
 	}
+
+	void clearScreen() {  
+		System.out.print("\033[H\033[2J");  
+		System.out.flush();  
+	}
+
 	void tulisMenu(){
 		System.out.print("MENU"); System.out.println();
         System.out.print("1. Sistem Persamaan Linier"); System.out.println();
@@ -478,6 +523,7 @@ class Matriks{
         System.out.print("4. Kaidah Cramer"); System.out.println();
 	}
 	int cetakMenu(){
+		this.clearScreen();
 		int pilihan;
 		this.tulisMenu();
 		Scanner read = new Scanner(System.in);
