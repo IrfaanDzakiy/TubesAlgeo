@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.io.*;
 import java.util.ArrayList;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 
 class Matriks{
 	double[][] mat;
@@ -24,6 +26,79 @@ class Matriks{
             System.out.print("Masukan b" + (i+1) + ": ");
             this.mat[i][this.kol-1] = read.nextDouble();
         }
+	}
+
+	void bacaFileMatriks(String namaFile){
+		//I.S matriks sembarang
+		//I.F matriks terdefinisi sesuai dengan file matriks
+		if (Files.notExists(Paths.get(namaFile))){
+			System.out.println("Maaf, file tidak ditemukan");
+		}
+		else{
+			try{
+				int i = 0;int j;
+				File file = new File(namaFile);
+				Scanner scanBaris = new Scanner(file);
+				Matriks temp = new Matriks(100,100);
+				while (scanBaris.hasNextLine()){
+					String sBaris = scanBaris.nextLine();
+					String[] arrString = sBaris.split(" ");
+					for (j = 0; j<arrString.length; j++){
+						temp.mat[i][j] = Double.parseDouble(arrString[j]);
+					}
+					i++;
+					this.mat = new double[i][arrString.length];
+					this.brs = i;
+					this.kol = arrString.length;
+				}
+				for (int k = 0; k<this.brs; k++){
+					for (int l = 0;l<this.kol; l++){
+						this.mat[k][l] = temp.mat[k][l];
+					}
+				}
+				scanBaris.close();
+			}
+			catch(FileNotFoundException ex){
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	void bacaFileIntrapolasi(String namaFile){
+		//I.S matriks sembarang
+		//I.F matriks terdefinisi sesuai dengan file matriks
+		if (Files.notExists(Paths.get(namaFile))){
+			System.out.println("Maaf, file tidak ditemukan");
+		}
+		else{
+			try{
+				int i = 0;int j;
+				File file = new File(namaFile);
+				Scanner scanBaris = new Scanner(file);
+				Matriks temp = new Matriks(100,2);
+				while (scanBaris.hasNextLine()){
+					String sBaris = scanBaris.nextLine();
+					String[] arrString = sBaris.split(" ");
+					for (j = 0; j<arrString.length; j++){
+						temp.mat[i][j] = Double.parseDouble(arrString[j]);
+					}
+					i++;
+					this.mat = new double[i][i+1];
+					this.brs = i;
+					this.kol = i+1;
+				}
+				for (int k = 0; k<this.brs; k++){
+					for (int l = 0;l<this.kol-1; l++){
+						this.mat[k][l] = Math.pow(temp.mat[k][0], l);
+					}
+					this.mat[k][this.kol-1] = temp.mat[k][1];
+				}
+				scanBaris.close();
+			}
+			catch(FileNotFoundException ex){
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	void tulisMatriks(){	//Output
@@ -434,7 +509,7 @@ class Matriks{
 		}
 		else {
 			System.out.print("Solusi :  "); System.out.println();
-			int k;
+			int k,l;
 			for ( k = Mutrexx.brs-1; k >= 0; k--){
 				ada.mat[k][1] = Mutrexx.mat[k][Mutrexx.kol];
 				for ( l = Mutrexx.kol-1; l >= 0; l--){
