@@ -130,6 +130,26 @@ class Matriks{
 		}
 	}
 
+	boolean isKolomNol(int j){
+		boolean nol = true;
+		for (int i = 0; i<this.brs; i++){
+			if (this.mat[i][j] != 0){
+				nol = false;
+			}
+		}
+		return nol;
+	}
+
+	boolean isBarisNol(int i){
+		boolean nol = true;
+		for (int j = 0; j<this.kol; j++){
+			if (this.mat[i][j] != 0){
+				nol = false;
+			}
+		}
+		return nol;
+	}
+
 	int getFirstIdx(int baris){
 		//mendapatkan indeks pertama pada baris yang bukan nol, jika engga ketemu return kol.
 		//baris dimulai dari 0 - (brs-1)
@@ -149,10 +169,10 @@ class Matriks{
 	void makeSatu(int baris){
 		//membuat koef pertama menjadi satu dan koefisien selanjutnya menyesuaikan;
 		int firstidx = this.getFirstIdx(baris);
-		if (firstidx<this.brs){
+		if (firstidx<this.kol){
 			double pembagi = this.mat[baris][firstidx];
 			for (int j = firstidx; j<this.kol; j++){
-				this.mat[baris][j] = this.mat[baris][j] / pembagi;
+				this.mat[baris][j] = this.mat[baris][j] * (1/pembagi);
 			}
 		}
 	}
@@ -160,7 +180,7 @@ class Matriks{
 	void makeNol(int baris){
 		//membuat koefisien dibawah baris menjadi nol dan sisanya menyesuaikan
 		int firstidx = this.getFirstIdx(baris);	
-		if (firstidx<this.brs){	
+		if (firstidx<this.kol){	
 			for (int i = baris+1; i<this.brs; i++){
 				while (this.mat[i][firstidx] != 0){
 					double faktor = this.mat[i][firstidx] / this.mat[baris][firstidx];
@@ -173,14 +193,13 @@ class Matriks{
 	}
 
 	void sortMatriks(){
-		//bubble sort matriks
 		////baris dimulai dari 0 - (brs-1)
 		int maks,idxmaks;
 		for (int i = 0; i<this.brs; i++){
 			idxmaks = this.brs-1;
 			maks = this.getFirstIdx(idxmaks);
 			for (int j = this.brs-2; j>-1+i; j--){
-				if (maks < this.getFirstIdx(j)){
+				if (maks <= this.getFirstIdx(j)){
 					this.tukarBaris(idxmaks,j);
 					idxmaks = j;
 					maks = this.getFirstIdx(idxmaks);
@@ -197,7 +216,7 @@ class Matriks{
 			idxmaks = this.brs-1;
 			maks = this.getFirstIdx(idxmaks);
 			for (int j = this.brs-2; j>-1+i; j--){
-				if (maks > this.getFirstIdx(j)){
+				if (maks >= this.getFirstIdx(j)){
 					this.tukarBaris(idxmaks,j);
 					idxmaks = j;
 					maks = this.getFirstIdx(idxmaks);
@@ -216,12 +235,22 @@ class Matriks{
 	void gaussJordan(){
 		//mengubah matriks kedalam bentuk gauss jordan
 		this.gauss();
+		this.tulisMatriks();
+		System.out.println();
 		for (int i = 0; i<this.brs; i++){
 			this.makeSatu(i);
 		}
+		this.tulisMatriks();
+		System.out.println();
 		this.rSortMatriks();
+		this.tulisMatriks();
+		System.out.println();
 		this.gauss();
+		this.tulisMatriks();
+		System.out.println();
 		this.sortMatriks();
+		this.tulisMatriks();
+		System.out.println();
 	}
 
 	Matriks inverseSPL(){
@@ -444,112 +473,103 @@ class Matriks{
 		return pilihan;
 	}
 	void solusiSPLGaussJordan(){
+		int batas, i, j, k, l;
 		this.gaussJordan();
-		int count = 0;
-		int masalah = 2;
+		this.sortMatriks();
+		Matriks hasil = new Matriks(this.brs,this.kol);
+		i=1;
+		while(i<this.brs){
+			if (this.getFirstIdx(i)>this.kol-1){
+				batas = this.kol-1;
+			}
+			else{
+				batas = this.getFirstIdx(i);
+			}
+			System.out.println(batas);
+			for(l = this.getFirstIdx(i-1)+1; l<batas; l++){
+				for(k = 0; k< this.brs; k++){
+					hasil.mat[k][l+1] = this.mat[k][l];
+				}
+			}
+			hasil.mat[i-1][0]=this.mat[i-1][this.kol-1];
+			hasil.mat[i][0]=this.mat[i][this.kol-1];
+			i++;
+		}
+		for (l=this.getFirstIdx(this.brs-1)+1; l<this.kol-1; l++){
+			for(k=0; k<this.brs; k++){
+				hasil.mat[k][l+1] = this.mat[k][l];
+			}
+		}
+		this.tulisMatriks();
+		System.out.println();
+		hasil.tulisMatriks();
 
-		if (this.brs < this.kol-1){
-			count += 1;
+		String output = "";
+		if ((!hasil.isBarisNol(hasil.brs-1)) && (hasil.getFirstIdx(hasil.brs-1)>=hasil.kol-1)){
+			output += String.format("SPL tidak konsisten\n");
 		}
+		else{
+			boolean tunggal=true;
+			for(j=1;j<hasil.kol;j++){
+				if (!hasil.isKolomNol(j)){
+					tunggal = false;
+				}
+			}
+			if (tunggal){
+				output += String.format("SPL memiliki solusi tunggal/unik\n");
+			}
+			else{
+				output += String.format("SPL memiliki solusi banyak\n");
+			}
 
-		for ( int k = 0; k < (this.brs); k++){
-			int found = 0;
-			for ( int l = 0; l < (this.kol-2); l++){
-				if ((this.mat[k][l] != 0) && (k != l)){
-					count += 1;
-					found = 1;
-					break;
+			for (i=0; i<hasil.brs; i++){
+				if (this.getFirstIdx(i)<this.kol-1){
+					output += String.format("x%d = ", this.getFirstIdx(i)+1);
+					output += String.format("%.2f ", hasil.mat[i][0]);
 				}
-				if ((this.mat[k][l] != 0) && (k == l)){
-					found = 1;
-					break;
-				}
-				else {
-					continue;
+				for(j=1; j<hasil.kol; j++){
+					if ((hasil.mat[i][j]!=0) && (j<hasil.kol-1)){
+						output += String.format("- (%.2fa%d) ", hasil.mat[i][j], j);
+					}
+					else if((hasil.mat[i][j]!=0) && (j==hasil.kol-1)){
+						output += String.format("- (%.2fa%d)\t", hasil.mat[i][j], j);
+					}
 				}
 			}
-			if ((found == 0) && ((k > (this.kol-1) || (this.brs < this.kol-1)))) {
-				count += 1;
-				if (this.mat[k][(this.kol-1)] != 0){
-					masalah = 1;
+			output += "\n";
+			for(j=1; j<hasil.kol; j++){
+				if (!hasil.isKolomNol(j)){
+					output += String.format("x%d = a%d", j,j);
+					output += "\n";
 				}
 			}
 		}
-		if (count != 0){
-			if (masalah == 1){
-				System.out.print("Solusi tidak ada"); System.out.println();
-			}
-			else {
-				System.out.print("Solusi berupa parametrik:  ");
-				this.parametrik();
-			}
-		}
-		else {
-			System.out.print("Solusi :  "); System.out.println();
-			int k;
-			for ( k = 0; k < (this.kol-1); k++){
-				System.out.print("x" + (k+1) + "=  ");
-				System.out.print(this.mat[k][this.kol-1]);
-				System.out.println();
-			}
-		}
+		System.out.println(output);
 	}
 	void solusiSPLGauss(){
 		this.gauss();
-		Matriks ada = new Matriks(this.brs, this.kol);
-		int count = 0;
-		int masalah = 2;
-
-		if (this.brs < this.kol-1){
-			count += 1;
-		}
-
-		for ( int k = 0; k < (this.brs); k++){
-			int found = 0;
-			for ( int l = 0; l < (this.kol-2); l++){
-				if ((this.mat[k][l] != 0) && (k != l)){
-					count += 1;
-					found = 1;
-					break;
-				}
-				if ((this.mat[k][l] != 0) && (k == l)){
-					found = 1;
-					break;
-				}
-				else {
-					continue;
-				}
-			}
-			if ((found == 0) && ((k > (this.kol-1) || (this.brs < this.kol-1)))) {
-				count += 1;
-				if (this.mat[k][(this.kol-1)] != 0){
-					masalah = 1;
-				}
-			}
-		}
-		if (count != 0){
-			if (masalah == 1){
+		Matriks ada = new Matriks(this.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
+		if (this.mat[this.brs-1][this.brs-1] == 0){
+			if (this.mat[this.brs-1][this.brs] != 0){
 				System.out.print("Solusi tidak ada"); System.out.println();
 			}
 			else {
-				System.out.print("Solusi berupa parametrik:  ");
-				this.parametrik();
+				System.out.print("Solusi :  ");
 			}
 		}
 		else {
 			System.out.print("Solusi :  "); System.out.println();
 			int k,l;
-			int h = 1;
-			for ( k = this.kol-2; k >= 0; k--){
+			for ( k = this.brs-1; k >= 0; k--){
 				ada.mat[k][1] = this.mat[k][this.kol-1];
 				int bacod = 0;
 				for ( l = this.kol-2; l > k; l--){
-					bacod += ada.mat[l][1]*this.mat[k][l];
+					int h = this.brs-1;
+					bacod += ada.mat[h][1]*this.mat[k][l];
+					h--;
 				}
 				ada.mat[k][1] -= bacod;
-				ada.mat[k][1] /= this.mat[k][k];
-				System.out.print("x"+(h)+" = "+ada.mat[k][1]); System.out.println();
-				h++;
+				System.out.print("x"+(k+1)+" = "+ada.mat[k][1]); System.out.println();
 			}
 		}
 	}
@@ -568,76 +588,5 @@ class Matriks{
 			System.out.print("x"+(i+1)+" = "+SolusiInvers.mat[i][0]); System.out.println();
 		}
 	}
-
-	void parametrik(){
-        String[] solusi = new String[this.kol];
-        int[] solusieksak = new int[this.kol];
-        int[] jenissolusi = new int[this.kol];
-
-        for (int i = this.brs ; i >= 0 ; i--){
-            int j = 0;
-            while ((j < this.kol-1)  && (this.mat[i][j] == 0)){
-                j++;
-            }
-            
-            if (this.mat[i][j] != 0){
-                solusi[j] = "x" + j + "=" ;
-                boolean parameter = false;
-            
-
-                for (k = (j + 1); k = this.kol-1; k++ ){    
-                    if (this.mat[i][j] != 0){
-                        if (jenissolusi[k] == 0){
-                            if (this.mat[i][k] > 0 ){
-                                solusi[j] += "-";
-                            }else if (this.mat[i][k] < 0){
-                                solusi[j] += "+";
-                            }
-                        
-                            this.solusi[j] += Math.abs(this.mat[i][k]) + "t" + k;
-                            parameter = true;
-                        }else if (jenissolusi == 1){
-                            double temp = this.mat[i][this.kol] - this.mat[i][k]*solusieksak[k];
-                            this.mat[i][this.kol] = temp;
-                            this.mat[i][k] = 0;
-                        }else if (jenissolusi == 2){
-                            for (int m = k + 1; m <= this.kol; m++){
-                                double temp = this.mat[i][m] - (this.mat[i][k]*this.mat[(int)solusieksak[k]][m]);
-                                this.mat[i][m] = temp;
-                            }
-                            this.mat[i][k] = 0;
-
-                        }
-                    }
-                }    
-    
-                if (!parameter){
-                    solusieksak[j] = this.mat[i][j];
-                    jenissolusi[j] = 1; 
-                }
-                else{
-                    jenissolusi[j] = 2;
-                    solusieksak[j] = i; //menyimpan baris ke berapa ia ditentukan
-                }
-
-                if (this.mat[i][this.kol] > 0){
-                    if (parameter){
-                        solusi[j] += " + " +  this.mat[i][this.kol];
-                    }else{
-                        solusi[j] += this.mat[i][this.kol];
-                    }
-                }else if (this.mat[i][this.kol] > 0){
-                    solusi[j] += "-" + this.mat[i][this.kol];      
-                }else{
-                    solusi[j] += this.mat[i][this.kol];
-                }
-            }
-        }
-        for (int i=this.NPeubah; i>=1; i--){
-            if (jenissolusi[i]==0){
-               solusi[j] = "x" + i + " = " + "t" + j;
-            } 
-        }
-    }
 
 }
