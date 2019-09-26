@@ -7,7 +7,7 @@ import java.nio.file.Files;
 class Matriks{
 	double[][] mat;
 	int brs,kol;
-
+	Scanner read = new Scanner(System.in);
 	Matriks(int baris, int kolom){		//Konstruktor
 		mat = new double[baris][kolom];
 		this.brs = baris;
@@ -69,6 +69,7 @@ class Matriks{
 		//I.F matriks terdefinisi sesuai dengan file matriks
 		if (Files.notExists(Paths.get(namaFile))){
 			System.out.println("Maaf, file tidak ditemukan");
+			return;
 		}
 		else{
 			try{
@@ -193,6 +194,7 @@ class Matriks{
 	}
 
 	void sortMatriks(){
+		//bubble sort matriks
 		////baris dimulai dari 0 - (brs-1)
 		int maks,idxmaks;
 		for (int i = 0; i<this.brs; i++){
@@ -235,22 +237,12 @@ class Matriks{
 	void gaussJordan(){
 		//mengubah matriks kedalam bentuk gauss jordan
 		this.gauss();
-		this.tulisMatriks();
-		System.out.println();
 		for (int i = 0; i<this.brs; i++){
 			this.makeSatu(i);
 		}
-		this.tulisMatriks();
-		System.out.println();
 		this.rSortMatriks();
-		this.tulisMatriks();
-		System.out.println();
 		this.gauss();
-		this.tulisMatriks();
-		System.out.println();
 		this.sortMatriks();
-		this.tulisMatriks();
-		System.out.println();
 	}
 
 	Matriks inverseSPL(){
@@ -448,6 +440,27 @@ class Matriks{
 		}
 		return res;
 	}
+	double interpolfile(){
+		String namaFile;
+		Matriks mutrex = new Matriks(this.brs,this.brs);
+		Scanner read = new Scanner(System.in);
+		System.out.print("Masukan nama file :");
+    	namaFile = read.nextLine();
+		mutrex.bacaFileIntrapolasi(namaFile);
+		mutrex.gaussJordan();
+		mutrex.tulisMatriks();
+		double f;
+		f = read.nextDouble();
+
+		double res;
+		res = 0;
+
+		int k;
+		for ( k = 0; k < (mutrex.kol-1); k++){
+			res += ((mutrex.mat[k][mutrex.kol-1])*Math.pow(f, k));
+		}
+		return res;
+	}
 	void tulisMenu(){
 		System.out.print("MENU"); System.out.println();
         System.out.print("1. Sistem Persamaan Linier"); System.out.println();
@@ -485,7 +498,6 @@ class Matriks{
 			else{
 				batas = this.getFirstIdx(i);
 			}
-			System.out.println(batas);
 			for(l = this.getFirstIdx(i-1)+1; l<batas; l++){
 				for(k = 0; k< this.brs; k++){
 					hasil.mat[k][l+1] = this.mat[k][l];
@@ -500,13 +512,11 @@ class Matriks{
 				hasil.mat[k][l+1] = this.mat[k][l];
 			}
 		}
-		this.tulisMatriks();
 		System.out.println();
-		hasil.tulisMatriks();
 
 		String output = "";
 		if ((!hasil.isBarisNol(hasil.brs-1)) && (hasil.getFirstIdx(hasil.brs-1)>=hasil.kol-1)){
-			output += String.format("SPL tidak konsisten\n");
+			output += String.format("SPL tidak memiliki solusi\n");
 		}
 		else{
 			boolean tunggal=true;
@@ -548,28 +558,60 @@ class Matriks{
 	}
 	void solusiSPLGauss(){
 		this.gauss();
-		Matriks ada = new Matriks(this.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
-		if (this.mat[this.brs-1][this.brs-1] == 0){
-			if (this.mat[this.brs-1][this.brs] != 0){
+		Matriks ada = new Matriks(this.brs, this.kol);
+		int count = 0;
+		int masalah = 2;
+
+		if (this.brs < this.kol-1){
+			count += 1;
+		}
+
+		for ( int k = 0; k < (this.brs); k++){
+			int found = 0;
+			for ( int l = 0; l < (this.kol-2); l++){
+				if ((this.mat[k][l] != 0) && (k != l)){
+					count += 1;
+					found = 1;
+					break;
+				}
+				if ((this.mat[k][l] != 0) && (k == l)){
+					found = 1;
+					break;
+				}
+				else {
+					continue;
+				}
+			}
+			if ((found == 0) && ((k > (this.kol-1) || (this.brs < this.kol-1)))) {
+				count += 1;
+				if (this.mat[k][(this.kol-1)] != 0){
+					masalah = 1;
+				}
+			}
+		}
+		if (count != 0){
+			if (masalah == 1){
 				System.out.print("Solusi tidak ada"); System.out.println();
 			}
 			else {
-				System.out.print("Solusi :  ");
+				System.out.print("Solusi berupa parametrik:  ");
+				this.solusiSPLGaussJordan();
 			}
 		}
 		else {
 			System.out.print("Solusi :  "); System.out.println();
 			int k,l;
-			for ( k = this.brs-1; k >= 0; k--){
+			int h = 1;
+			for ( k = this.kol-2; k >= 0; k--){
 				ada.mat[k][1] = this.mat[k][this.kol-1];
 				int bacod = 0;
 				for ( l = this.kol-2; l > k; l--){
-					int h = this.brs-1;
-					bacod += ada.mat[h][1]*this.mat[k][l];
-					h--;
+					bacod += ada.mat[l][1]*this.mat[k][l];
 				}
 				ada.mat[k][1] -= bacod;
-				System.out.print("x"+(k+1)+" = "+ada.mat[k][1]); System.out.println();
+				ada.mat[k][1] /= this.mat[k][k];
+				System.out.print("x"+(h)+" = "+ada.mat[k][1]); System.out.println();
+				h++;
 			}
 		}
 	}
