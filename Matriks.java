@@ -344,7 +344,6 @@ class Matriks{
 			return pos - neg;
 		}
 	}
-	
 	//Mendapatkan Matriks kofaktor
 	Matriks cofactor(){
 		Matriks cof = new Matriks(this.brs, this.kol);
@@ -360,11 +359,9 @@ class Matriks{
 		}
 		return cof;
 	}
-
 	Matriks adjoint(){
 		return this.cofactor().transpose();
 	}
-
 	Matriks kaliKons(double X){
 		Matriks x = new Matriks(this.brs,this.kol);
 		for (int p = 0; p < this.brs; p++){
@@ -374,7 +371,6 @@ class Matriks{
 		}
 		return x;
 	}
-
 	Matriks kaliMatriks(Matriks B){
 		//menghasilkan matriks hasil kali matriks this dan matriks B, pre kondisi kolom matriks (this) = baris matriks B.
 		Matriks C = new Matriks(this.brs,B.kol);
@@ -389,14 +385,12 @@ class Matriks{
         }
         return C;
 	}
-
 	//membuat matriks invers
 	Matriks inverse(){
 		Matriks in = new Matriks(this.brs, this.kol);
 		in = this.adjoint().kaliKons(1/this.determinan());
         return in;		
 	}
-
 	double interpol(int n){
 		Matriks mutrex = new Matriks(n, n+1);
 		int i,j;
@@ -427,7 +421,6 @@ class Matriks{
 		}
 		return res;
 	}
-
 	void tulisMenu(){
 		System.out.print("MENU"); System.out.println();
         System.out.print("1. Sistem Persamaan Linier"); System.out.println();
@@ -438,14 +431,12 @@ class Matriks{
         System.out.print("6. Interpolasi Polinom"); System.out.println();
         System.out.print("7. Keluar"); System.out.println();
 	}
-
 	void tulisSubMenu(){
         System.out.print("1. Metode eliminasi Gauss"); System.out.println();
         System.out.print("2. Metode eliminasi Gauss-Jordan"); System.out.println();
         System.out.print("3. Metode Matriks Balikan"); System.out.println();
         System.out.print("4. Kaidah Cramer"); System.out.println();
 	}
-
 	int cetakMenu(){
 		int pilihan;
 		this.tulisMenu();
@@ -454,7 +445,6 @@ class Matriks{
 		pilihan = read.nextInt();
 		return pilihan;
 	}
-
 	void solusiSPLGaussJordan(Matriks Mutrexx){
 		Mutrexx.gaussJordan();
 		Matriks ada = new Matriks(Mutrexx.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
@@ -495,7 +485,6 @@ class Matriks{
 			}
 		}
 	}
-
 	void solusiSPLGauss(Matriks Mutrexx){
 		Mutrexx.gauss();
 		Matriks ada = new Matriks(Mutrexx.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
@@ -538,5 +527,4 @@ class Matriks{
 			System.out.print("x"+(i+1)+" = "+SolusiInvers.mat[i][0]);
 		}
 	}
-	
 }
