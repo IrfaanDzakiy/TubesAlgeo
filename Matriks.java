@@ -143,6 +143,12 @@ class Matriks{
 		return output;
 	}
 
+	String inputNamaFile(){
+		System.out.print("Masukan nama file :");
+		String nama = read.nextLine();
+		return nama;
+	}
+
 	String doubleToString(Double input){	//Output
 		String output = "";
 		output += String.format("%f ", input);

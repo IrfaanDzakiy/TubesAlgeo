@@ -186,10 +186,9 @@ class PronEn{
                     pilihan = read.nextInt();
 
                     Matriks Mutrex1 = new Matriks(M.brs,M.kol);
-                    System.out.print("Masukan nama file :");
-                    namaFile = read.nextLine();
+                    namaFile = M.inputNamaFile();
 
-                    Mutrex1.bacaFileMatriks("1A.txt");
+                    Mutrex1.bacaFileMatriks(namaFile);
                     if (pilihan == 1){
                         Mutrex1.gauss();
                         Mutrex1.tulisMatriks();
