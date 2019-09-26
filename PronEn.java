@@ -189,7 +189,7 @@ class PronEn{
                     System.out.print("Masukan nama file :");
                     namaFile = read.nextLine();
 
-                    Mutrex1.bacaFileMatriks(namaFile);
+                    Mutrex1.bacaFileMatriks("1A.txt");
                     if (pilihan == 1){
                         Mutrex1.gauss();
                         Mutrex1.tulisMatriks();

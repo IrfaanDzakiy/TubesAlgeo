@@ -136,7 +136,7 @@ class Matriks{
 		String output = "";
 		for (int i=0; i<this.brs; i++){
 			for (int j=0; j<this.kol; j++){
-				output += String.format("%f ", this.mat[i][j]);
+				output += String.format("%.2f ", this.mat[i][j]);
 			}
 			output += "\n";
 		}
@@ -560,10 +560,11 @@ class Matriks{
 				hasil.mat[k][l+1] = this.mat[k][l];
 			}
 		}
+		hasil.tulisMatriks();
 		System.out.println();
 
 		String output = "";
-		if ((!hasil.isBarisNol(hasil.brs-1)) && (hasil.getFirstIdx(hasil.brs-1)>=hasil.kol-1)){
+		if ((!hasil.isBarisNol(hasil.brs-1)) && (this.getFirstIdx(hasil.brs-1)==this.kol-1)){
 			output += String.format("SPL tidak memiliki solusi\n");
 		}
 		else{
