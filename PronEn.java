@@ -208,7 +208,10 @@ class PronEn{
                         Mutrex1.tulisMatriks();
                         Mutrex1.solusiSPLInvers();
                     }
-                    System.out.print("Mau disave ga? (1/0)");
+                    if ((pilihan > 4) || (pilihanku < 1)) {
+                        System.out.print("Masukin yang bener dong!");
+                    }
+                    System.out.print("Mau disave ga? (1/0) :  ");
                     int mauga = read.nextInt();
                     if (mauga == 1){
                         String temp = Mutrex1.sTulisMatriks();
@@ -225,7 +228,7 @@ class PronEn{
                     System.out.print("Solusi determinan matriks adalah : "); 
                     System.out.print(hasil);
 
-                    System.out.print("Mau disave ga? (1/0)");
+                    System.out.print("Mau disave ga? (1/0) :  ");
                     int mauga = read.nextInt();
                     if (mauga == 1){
                         String temp = Mutrex2.doubleToString(hasil);
@@ -243,7 +246,7 @@ class PronEn{
                     Matriks hasilInvers = new Matriks(Mutrex3.brs,Mutrex3.kol);
                     hasilInvers.inverse().tulisMatriks();
 
-                    System.out.print("Mau disave ga? (1/0)");
+                    System.out.print("Mau disave ga? (1/0) :  ");
                     int mauga = read.nextInt();
                     if (mauga == 1){
                         String temp = Mutrex3.sTulisMatriks();
@@ -261,7 +264,7 @@ class PronEn{
                     hasilCofactor = Mutrex4.cofactor();
                     hasilCofactor.tulisMatriks();
 
-                    System.out.print("Mau disave ga? (1/0)");
+                    System.out.print("Mau disave ga? (1/0) :  ");
                     int mauga = read.nextInt();
                     if (mauga == 1){
                         String temp = Mutrex4.sTulisMatriks();
@@ -278,7 +281,7 @@ class PronEn{
                     hasilAdjoint = Mutrex5.adjoint();
                     hasilAdjoint.tulisMatriks();
 
-                    System.out.print("Mau disave ga? (1/0)");
+                    System.out.print("Mau disave ga? (1/0) :  ");
                     int mauga = read.nextInt();
                     if (mauga == 1){
                         String temp = Mutrex5.sTulisMatriks();
@@ -291,7 +294,7 @@ class PronEn{
                     double hasil = interporu.interpolfile();
                     System.out.print(hasil);
 
-                    System.out.print("Mau disave ga? (1/0)");
+                    System.out.print("Mau disave ga? (1/0) :  ");
                     int mauga = read.nextInt();
                     if (mauga == 1){
                         String temp = interporu.doubleToString(hasil);
