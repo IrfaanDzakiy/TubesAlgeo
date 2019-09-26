@@ -36,20 +36,22 @@ class PronEn{
 
                 if (pilihan == 1){
                     Mutrex1.gauss();
-                    if (Mutrex1.mat[bar][kol] == 0){
-                        if (Mutrex1.mat[bar][kol+1] != 0){
-                            System.out.print("Solusi tidak ada");
-                        }
-                        else {
-                            System.out.print("Solusi berupa parametrik :  ");
-                        }
-                    }
-                    else {
-                        
-                    }
+                    Mutrex1.tulisMatriks();
+                    Mutrex1.solusiSPLGauss();
                 }
                 if (pilihan == 2){
-                    
+                   
+                    Mutrex1.gaussJordan();
+                    Mutrex1.tulisMatriks();
+                    Mutrex1.solusiSPLGaussJordan();
+                }
+                if (pilihan == 3){
+                    Mutrex1.tulisMatriks();
+                    Mutrex1.solusiSPLCramer();
+                }
+                if (pilihan == 4){
+                    Mutrex1.tulisMatriks();
+                    Mutrex1.solusiSPLInvers();
                 }
             }
             if (pilihanku == 2) {
@@ -128,7 +130,6 @@ class PronEn{
                         Mutrex5.mat[i][j] = read.nextDouble();
                     }
                 }
-                Mutrex5.solusiSPLGaussJordan(Mutrex5);
                 System.out.print("Solusi Matriks hasil Adjoin adalah :  "); System.out.println();
                 Matriks hasilAdjoint = new Matriks(bar,kol);
                 hasilAdjoint = Mutrex5.adjoint();

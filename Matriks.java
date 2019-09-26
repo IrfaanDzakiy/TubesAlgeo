@@ -291,9 +291,7 @@ class Matriks{
 			}
 		}
 		return temp;
-	}
-						
-					
+	}									
 	// Mendapatkan matriks transpose dari suatu matriks.
 	Matriks transpose(){
 		Matriks temp = new Matriks(this.kol, this.brs);
@@ -445,51 +443,32 @@ class Matriks{
 		pilihan = read.nextInt();
 		return pilihan;
 	}
-	void solusiSPLGaussJordan(Matriks Mutrexx){
-		Mutrexx.gaussJordan();
-		Matriks ada = new Matriks(Mutrexx.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
-		if (Mutrexx.mat[Mutrexx.brs][Mutrexx.kol-1] == 0){
-			if (Mutrexx.mat[Mutrexx.brs][Mutrexx.kol] != 0){
+	void solusiSPLGaussJordan(){
+		this.gaussJordan();
+		Matriks ada = new Matriks(this.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
+		if (this.mat[this.brs-1][this.brs-1] == 0){
+			if (this.mat[this.brs-1][this.brs] != 0){
 				System.out.print("Solusi tidak ada"); System.out.println();
 			}
 			else {
 				System.out.print("Solusi :  ");
-				int k;
-				for ( k = Mutrexx.brs-1; k >= 0; k--){
-					if (Mutrexx.mat[k][Mutrexx.kol] == 0){
-						ada.mat[k][1] = 0;
-						ada.mat[k][2] = 1;
-						System.out.print("x"+(k+1)+ " = s"); System.out.println();
-					}
-					else {
-						ada.mat[k][1] = Mutrexx.mat[k][Mutrexx.kol];
-						ada.mat[k][2] = 0;
-						for (int l = Mutrexx.kol-1; l > k; l--){
-							ada.mat[k][1] -= ada.mat[l][1];
-							ada.mat[k][2] -= ada.mat[l][2];
-							}
-						}
-					if (ada.mat[k][2] > 0) {
-					System.out.print("x"+(k+1)+" = "+ada.mat[k][1]+"+"+ada.mat[k][2]+"s"); System.out.println();
-					}	
-				}
 			}
 		}
 		else {
 			System.out.print("Solusi :  "); System.out.println();
 			int k;
-			for ( k = 0; k < Mutrexx.brs; k++){
+			for ( k = 0; k < this.brs; k++){
 				System.out.print("x" + (k+1) + "=  ");
-				System.out.print(Mutrexx.mat[k][Mutrexx.kol]);
+				System.out.print(this.mat[k][this.kol-1]);
 				System.out.println();
 			}
 		}
 	}
-	void solusiSPLGauss(Matriks Mutrexx){
-		Mutrexx.gauss();
-		Matriks ada = new Matriks(Mutrexx.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
-		if (Mutrexx.mat[Mutrexx.brs][Mutrexx.kol-1] == 0){
-			if (Mutrexx.mat[Mutrexx.brs][Mutrexx.kol] != 0){
+	void solusiSPLGauss(){
+		this.gauss();
+		Matriks ada = new Matriks(this.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
+		if (this.mat[this.brs-1][this.brs-1] == 0){
+			if (this.mat[this.brs-1][this.brs] != 0){
 				System.out.print("Solusi tidak ada"); System.out.println();
 			}
 			else {
@@ -499,24 +478,24 @@ class Matriks{
 		else {
 			System.out.print("Solusi :  "); System.out.println();
 			int k,l;
-			for ( k = Mutrexx.brs-1; k >= 0; k--){
-				ada.mat[k][1] = Mutrexx.mat[k][Mutrexx.kol];
-				for ( l = Mutrexx.kol-1; l >= 0; l--){
-					int h = Mutrexx.brs-1;
-					ada.mat[k][1] -= ada.mat[h][1]*Mutrexx.mat[k][l];
+			for ( k = this.brs-1; k >= 0; k--){
+				ada.mat[k][1] = this.mat[k][this.kol-1];
+				int bacod = 0;
+				for ( l = this.kol-2; l > k; l--){
+					int h = this.brs-1;
+					bacod += ada.mat[h][1]*this.mat[k][l];
 					h--;
 				}
-			}
-			if (ada.mat[k][1] > 0) {
+				ada.mat[k][1] -= bacod;
 				System.out.print("x"+(k+1)+" = "+ada.mat[k][1]); System.out.println();
-			}	
+			}
 		}
 	}
 	void solusiSPLCramer(){
 		double hasil;
 		for (int i = 0; i < this.brs; i++){
 			hasil = this.cramer(i);
-			System.out.print("x"+(i+1)+" = "+hasil);
+			System.out.print("x"+(i+1)+" = "+hasil);  System.out.println();
 		}
 	}
 
@@ -524,7 +503,8 @@ class Matriks{
 		Matriks SolusiInvers = new Matriks(this.brs, 1);
 		SolusiInvers = this.inverseSPL();
 		for (int i = 0; i < this.brs; i++){
-			System.out.print("x"+(i+1)+" = "+SolusiInvers.mat[i][0]);
+			System.out.print("x"+(i+1)+" = "+SolusiInvers.mat[i][0]); System.out.println();
 		}
 	}
+
 }
