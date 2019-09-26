@@ -466,7 +466,7 @@ class Matriks{
 	}
 	void solusiSPLGauss(){
 		this.gauss();
-		Matriks ada = new Matriks(this.brs, 2); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
+		Matriks ada = new Matriks(this.brs, this.kol); // penanda bentuk parametrik, baris 1 konstanta, baris 2 variabel
 		if (this.mat[this.brs-1][this.brs-1] == 0){
 			if (this.mat[this.brs-1][this.brs] != 0){
 				System.out.print("Solusi tidak ada"); System.out.println();
@@ -482,11 +482,10 @@ class Matriks{
 				ada.mat[k][1] = this.mat[k][this.kol-1];
 				int bacod = 0;
 				for ( l = this.kol-2; l > k; l--){
-					int h = this.brs-1;
-					bacod += ada.mat[h][1]*this.mat[k][l];
-					h--;
+					bacod += ada.mat[l][1]*this.mat[k][l];
 				}
 				ada.mat[k][1] -= bacod;
+				ada.mat[k][1] /= this.mat[k][k];
 				System.out.print("x"+(k+1)+" = "+ada.mat[k][1]); System.out.println();
 			}
 		}
