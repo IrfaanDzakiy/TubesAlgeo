@@ -481,11 +481,19 @@ class Matriks{
 	}
 	double interpolfile(){
 		String namaFile;
-		Matriks mutrex = new Matriks(this.brs,this.brs);
+		Matriks mutrex1 = new Matriks(this.brs,2);
+		Matriks mutrex = new Matriks(mutrex1.brs,mutrex1.brs+1);
 		Scanner read = new Scanner(System.in);
 		System.out.print("Masukan nama file :");
     	namaFile = read.nextLine();
-		mutrex.bacaFileIntrapolasi(namaFile);
+		mutrex1.bacaFileIntrapolasi(namaFile);
+
+		for ( int i = 0; i < mutrex1.brs; i++){
+			for ( int j = 0; j< mutrex1.brs; j++){
+				mutrex.mat[i][j] = Math.pow(mutrex1.mat[i][0], j);
+			}
+			mutrex.mat[i][mutrex1.brs] = mutrex1.mat[i][1];
+		}
 		mutrex.gaussJordan();
 		mutrex.tulisMatriks();
 		double f;
@@ -499,11 +507,6 @@ class Matriks{
 			res += ((mutrex.mat[k][mutrex.kol-1])*Math.pow(f, k));
 		}
 		return res;
-	}
-
-	void clearScreen() {  
-		System.out.print("\033[H\033[2J");  
-		System.out.flush();  
 	}
 
 	void tulisMenu(){
@@ -523,7 +526,6 @@ class Matriks{
         System.out.print("4. Kaidah Cramer"); System.out.println();
 	}
 	int cetakMenu(){
-		this.clearScreen();
 		int pilihan;
 		this.tulisMenu();
 		Scanner read = new Scanner(System.in);
@@ -628,7 +630,7 @@ class Matriks{
 					continue;
 				}
 			}
-			if ((found == 0) && ((k > (this.kol-1) || (this.brs < this.kol-1)))) {
+			if ((found == 0) && ((k <= (this.kol-1) || (this.brs < this.kol-1)))) {
 				count += 1;
 				if (this.mat[k][(this.kol-1)] != 0){
 					masalah = 1;
